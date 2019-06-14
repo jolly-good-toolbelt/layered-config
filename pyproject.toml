@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "layered-config"
+version = "2.0.0"
+description = "A tool for managing layered config files!"
+authors = ["Ryan Casperson <casperson.ryan@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+munch = {version = "*", optional = true}
+
+[tool.poetry.dev-dependencies]
+pytest = "^4.6"
+pre-commit = "^1.17"
+sphinx = "^2.1"
+sphinx-rtd-theme = "^0.4.3"
+tomlkit = "^0.5.3"
+ghp-import = "^0.5.5"
+
+[tool.poetry.extras]
+munch = ["munch"]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
