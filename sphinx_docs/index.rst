@@ -23,6 +23,7 @@ Maintainer's Documentation
 .. toctree::
 
     MAINTAINER
+    CONTRIBUTORS
 
 
 
