@@ -8,7 +8,10 @@ Runs the following commands:
 import argparse
 from subprocess import check_call
 
-commands_to_run = [["poetry", "install"], ["poetry", "run", "pre-commit", "install"]]
+commands_to_run = [
+    ["poetry", "install", "-E", "munch"],
+    ["poetry", "run", "pre-commit", "install"],
+]
 
 __doc__ = __doc__.format("\n".join(map(" ".join, commands_to_run)))
 
