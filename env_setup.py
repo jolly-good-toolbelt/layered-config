@@ -9,6 +9,7 @@ import argparse
 from subprocess import check_call
 
 commands_to_run = [
+    ["poetry", "run", "pip", "install", "--upgrade", "pip<19"],
     ["poetry", "install", "-E", "munch"],
     ["poetry", "run", "pre-commit", "install"],
 ]
