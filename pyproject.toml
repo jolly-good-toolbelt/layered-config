@@ -2,7 +2,19 @@
 name = "layered-config"
 version = "2.0.0"
 description = "A tool for managing layered config files!"
-authors = ["Ryan Casperson <casperson.ryan@gmail.com>"]
+authors = ["Doug Philips <dgou@mac.com>"]
+license = "MIT"
+readme = "README.rst"
+homepage = "https://github.com/jolly-good-toolbelt/layered-config"
+repository = "https://github.com/jolly-good-toolbelt/layered-config"
+documentation = "https://jolly-good-toolbelt.github.io/layered-config/"
+keywords = ["layers", "config", "configparser", "ini", "dict"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    ]
 
 [tool.poetry.dependencies]
 python = "^3.6"
