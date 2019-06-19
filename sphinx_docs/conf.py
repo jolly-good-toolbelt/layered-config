@@ -32,7 +32,7 @@ release = version
 
 # General information about your project.
 project = "layered-config - library for layering config files"
-copyright = "2018, Doug Philips and Ryan Casperson"  # noqa
+copyright = "2018, Doug Philips"  # noqa
 author = "Doug Philips"
 
 ######################################################
