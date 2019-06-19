@@ -31,9 +31,9 @@ release = version
 ######################################################
 
 # General information about your project.
-project = "Tableread - turn a rST table into a Python object!"
-copyright = "2018, Brad Brown"  # noqa
-author = "Brad Brown"
+project = "layered-config - library for layering config files"
+copyright = "2018, Doug Philips"  # noqa
+author = "Doug Philips"
 
 ######################################################
 # BELOW HERE YOU SHOULD BE ABLE TO LEAVE AS-IS.
