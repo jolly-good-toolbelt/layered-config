@@ -20,7 +20,8 @@ tl;dr Quick Start in 3 Easy Steps:
 
 For this simple example, consider three config files:
 
-    | ``base.config`` - all the common stuff between your environments.
+    | ``../base.config`` - all the common stuff between your environments,
+      stored in the parent directory of the master.config file.
     | ``staging.config`` - config info specific to your staging environment.
     | ``demo.config`` - config info specific to your demo environment.
 
@@ -32,14 +33,16 @@ Your code needs to know its name, but this library doesn't care.
 
 .. code:: INI
 
-    [env1]
+    [staging environment]
     # layers is a comma separated list of configuration files to load,
-    # in order, left to right: ``base.config`` is loaded first, and then
+    # in order, left to right: ``../base.config`` is loaded first, and then
     # ``staging.config`` is loaded over top of it.
-    layers = base.config, staging.config
+    # The file names can be absolute paths, or relative paths.
+    # Relative paths are relative to the directory containing the master.config file.
+    layers = ../base.config, staging.config
 
-    [env2]
-    layers = base.config, demo.config
+    [demo environment]
+    layers = ../base.config, demo.config
 
 
 2. Add One Call to Your Code:
@@ -49,7 +52,7 @@ Your code needs to know its name, but this library doesn't care.
 
     from layered_config import load_cake
     # ...
-    my_config_parser_instance = load_cake("master.config", environment_name_here)
+    my_config_parser_instance = load_cake("master.config", config_section_name)
 
 
 3. What Just Happened?
@@ -58,11 +61,11 @@ Your code needs to know its name, but this library doesn't care.
 The call to ``load_cake``:
 
 #. created a new empty |ConfigParser| object (see the API docs if you want to customize it).
-#. looked in the ``master.config`` file for a section matching the value of ``environment_name_here``.
+#. looked in the ``master.config`` file for a section matching the value of ``config_section_name``.
 #. retrieved the value for the ``layers`` key of that section.
 #. processed the files in that value, from left to right,
    loading each config file into the ConfigParser instance, and making sure the file exists.
-   For the example above, this means that values defined in ``base.config`` can be replaced by,
+   For the example above, this means that values defined in ``../base.config`` can be replaced by,
    and/or added to by, those in ``staging.config`` or ``demo.config``
 
 
