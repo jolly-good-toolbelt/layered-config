@@ -34,14 +34,12 @@ Your code needs to know its name, but this library doesn't care.
 
     [env1]
     # layers is a comma separated list of configuration files to load,
-    # in order, from left to right.
+    # in order, left to right: ``base.config`` is loaded first, and then
+    # ``staging.config`` is loaded over top of it.
     layers = base.config, staging.config
 
     [env2]
     layers = base.config, demo.config
-    # Any additional keys in this section will be transfered to the defaults section
-    # of the |ConfigParser| returned when this section's layers are loaded.
-    keyA = valueA
 
 
 2. Add One Call to Your Code:
@@ -57,11 +55,15 @@ Your code needs to know its name, but this library doesn't care.
 3. What Just Happened?
 ~~~~~~~~~~~~~~~~~~~~~~
 
-``load_cake``:
-    1. created a new empty |ConfigParser| object (see the API docs if you want to customize it).
-    1. looked in the ``master.config`` file for a section matching the value of ``environment_name_here``.
-    1. retrieved the value for the ``layers`` key of that section.
-    1. loaded each config file into the ConfigParser instance, making sure the file exists.
+The call to ``load_cake``:
+
+#. created a new empty |ConfigParser| object (see the API docs if you want to customize it).
+#. looked in the ``master.config`` file for a section matching the value of ``environment_name_here``.
+#. retrieved the value for the ``layers`` key of that section.
+#. processed the files in that value, from left to right,
+   loading each config file into the ConfigParser instance, and making sure the file exists.
+   For the example above, this means that values defined in ``base.config`` can be replaced by,
+   and/or added to by, those in ``staging.config`` or ``demo.config``
 
 
 A few more details
@@ -78,7 +80,8 @@ an old Python class we know and love. Or at least know.
    * ConfigParser is designed to ignore files it can't find, on purpose.
      We want to consider that an error.
    * Calling ConfigParser directly you have to put the configuration file list into your code.
-     We want to allow that to be changed and updated without having to make any code changes.
+     We want to allow the list of configuration files itself
+     to be changed and updated without having to make any code changes.
    * ConfigParser does not support environment variable overrides.
      We have found environment variable overrides very helpful for CICD situations as well as
      one-time local testing.
