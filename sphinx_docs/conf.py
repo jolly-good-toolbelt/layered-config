@@ -48,6 +48,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
     "sphinx.ext.inheritance_diagram",
+    "sphinx.ext.intersphinx",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -86,6 +87,8 @@ todo_include_todos = True
 # Include both class and init docstrings
 autoclass_content = "both"
 
+# Reference the Python docs
+intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 
 # -- Options for HTML output ----------------------------------------------
 

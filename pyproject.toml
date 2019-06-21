@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "layered-config"
-version = "2.0.0"
+version = "2.0.1"
 description = "A tool for managing layered config files!"
 authors = ["Doug Philips <dgou@mac.com>"]
 license = "MIT"
