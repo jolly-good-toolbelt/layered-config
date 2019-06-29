@@ -1,10 +1,9 @@
 [tool.poetry]
 name = "layered-config"
-version = "2.0.1"
+version = "2.0.2"
 description = "A tool for managing layered config files!"
 authors = ["Doug Philips <dgou@mac.com>"]
 license = "MIT"
-readme = "README.rst"
 homepage = "https://github.com/jolly-good-toolbelt/layered-config"
 repository = "https://github.com/jolly-good-toolbelt/layered-config"
 documentation = "https://jolly-good-toolbelt.github.io/layered-config/"
