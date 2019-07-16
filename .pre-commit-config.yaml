@@ -16,3 +16,4 @@ repos:
                 - flake8-tuple
                 - flake8-quotes
                 - pep8-naming
+                - pydocstyle<4.0.0
