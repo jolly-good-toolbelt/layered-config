@@ -1,32 +1,29 @@
 language: python
 python:
-  - "3.6"
-
+- '3.6'
 branches:
   only:
-    - master
-
+  - master
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install graphviz
-  - pip install poetry
-
+- sudo apt-get update
+- sudo apt-get install graphviz
+- pip install poetry
 install:
-  - ./env_setup.py
-
+- "./env_setup.py"
 script:
-  - ./self_check.py
-  - ./bin/build_docs.py
-
+- "./self_check.py"
+- "./bin/build_docs.py"
 before_deploy:
-  - poetry config http-basic.pypi $PYPI_USER $PYPI_PASS
-  - poetry build
-
+- poetry config http-basic.pypi $PYPI_USER $PYPI_PASS
+- poetry build
 deploy:
-  - provider: pages
-    skip_cleanup: true
-    github_token: $GH_TOKEN
-    local_dir: docs/
-  - provider: script
-    script: poetry publish
-    skip_cleanup: true
+- provider: pages
+  skip_cleanup: true
+  github_token: "$GH_TOKEN"
+  local_dir: docs/
+- provider: script
+  script: poetry publish
+  skip_cleanup: true
+notifications:
+  slack:
+    secure: EEHaXh+UUmYAPfhJnnwdxKhwa1hmOb3+43ZVCfTn/6QG0rENuHiKWFiA3aM5wxO2u5IYB9ngQ46hgHMz+k6OcnNAy/sxKmYvLPiQHAk7Sc9mcp13Ev5NZJC+QtmdQcsoba6T7porxNdx78jWfWyWlUbxN5g/qNtqmrFbW0qRJvMAkB1mqsad0U+xqCBn2rVbvKAAKeWBZLvAMY7YLVF5d9xYstrIWl76sUzyDpzbSsbNbR+8YICkYEpIW82dMaxH1XP5vYZcW+pIGKm0KbVdIx9FdbtpetN8WHi9vnYsb+ac6P6e8ZmfmzYsZMu1OdrkeihTBM1ne5jZVPnUchY+tirdQ8qhqXo+OfVQT10TCKKThC0P1+WZm8Zb1ZOE0JQTpCSv4Eis4iAzB1HuQUHzbmgTrJHFxghD4QrAPfl/UxKCdts/b9VFuWVw4Gcxj3iMX7K11U3++vwgA8aJM4AYoEn0tKgCHlX+61PzK/dFVh1g71Za159fUawS5oXdxZCbfzYkuo9flPRUC+MvvrGlR8u34BQPRHl3p8+9/YOhwq2R8JFOT27u5ZhyH+VLWxi+R1GnqW0FwqELAZoeI3DKuxpO2nzIqKZ+S7yyNzm68lR1egkU3N5jH3gmcDscdIGfgKs4MyDxCHHXvo0Atg5rPVvs+E6waerHrygk3nd1KRE=
