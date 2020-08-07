@@ -189,7 +189,7 @@ description = "A collection of tools for commmon package scripts"
 name = "jgt-tools"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.2.4"
+version = "0.3.1"
 
 [package.dependencies]
 tomlkit = ">=0.5.3,<0.6.0"
@@ -604,7 +604,7 @@ testing = ["jaraco.itertools", "func-timeout"]
 munch = ["munch"]
 
 [metadata]
-content-hash = "ea6ab57987025cd49d176243860a29cc675a539e6a23295ddcb16443584a0512"
+content-hash = "a7ed97cfb585c53bfba06a25a856f5a3a404e6308f97d6cc156c7aa5efbb78bf"
 lock-version = "1.0"
 python-versions = "^3.6"
 
@@ -685,8 +685,8 @@ importlib-resources = [
     {file = "importlib_resources-3.0.0.tar.gz", hash = "sha256:19f745a6eca188b490b1428c8d1d4a0d2368759f32370ea8fb89cad2ab1106c3"},
 ]
 jgt-tools = [
-    {file = "jgt_tools-0.2.4-py3-none-any.whl", hash = "sha256:d4345163c651d59289e2fec586f727cca372eb6af806dae51cb99ea4ce95a6b2"},
-    {file = "jgt_tools-0.2.4.tar.gz", hash = "sha256:f13fc2477617dec4a0756be63e4a3b48ad790ee3535c78d512360460d962dd71"},
+    {file = "jgt_tools-0.3.1-py3-none-any.whl", hash = "sha256:6a9211da51e52324e261ea68ee8f2a3749037b63e6155412697b41e9a7ae78ce"},
+    {file = "jgt_tools-0.3.1.tar.gz", hash = "sha256:83316a39c3d39e2b8496a8b105a62321a6578d87c1006dd1d40d822738467c0c"},
 ]
 jinja2 = [
     {file = "Jinja2-2.11.2-py2.py3-none-any.whl", hash = "sha256:f0a4641d3cf955324a89c04f3d94663aa4d638abe8f733ecd3582848e1c37035"},
