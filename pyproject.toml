@@ -20,17 +20,18 @@ python = "^3.6"
 munch = {version = "*", optional = true}
 
 [tool.poetry.dev-dependencies]
-pytest = "^4.6"
-pre-commit = "^1.17"
-sphinx = "^2.1"
-sphinx-rtd-theme = "^0.4.3"
-tomlkit = "^0.5.3"
-ghp-import = "^0.5.5"
-jgt_tools = "^0.3.1"
+jgt_tools = {version = "^0.4.0", extras = ["env_setup"]}
 
 [tool.poetry.extras]
 munch = ["munch"]
 
+[tool.jgt_tools]
+env_setup_commands = [
+    "poetry run pip install --upgrade pip<19",
+    "poetry install -E munch",
+    "poetry run pre-commit install"
+]
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
+
