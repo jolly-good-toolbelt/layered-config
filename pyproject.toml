@@ -31,7 +31,7 @@ env_setup_commands = [
     "poetry install -E munch",
     "poetry run pre-commit install"
 ]
+
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
-
