@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>layered_config package &mdash; layered-config - A tool for managing layered config files! 2.0.3 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Maintainer’s Documentation" href="MAINTAINER.html" />
+    <link rel="prev" title="layered_config" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> layered-config - A tool for managing layered config files!
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">layered_config package</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="MAINTAINER.html">Maintainer’s Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MAINTAINER.html#top-level-scripts">Top-level scripts:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MAINTAINER.html#jgt-tools-scripts">JGT Tools scripts:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTORS.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">layered-config - A tool for managing layered config files!</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>layered_config package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/layered_config.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-layered_config">
+<span id="layered-config-package"></span><h1>layered_config package<a class="headerlink" href="#module-layered_config" title="Permalink to this headline">¶</a></h1>
+<p>Tools for working with the <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code> instances.</p>
+<p><a class="reference internal" href="#layered_config.load_cake" title="layered_config.load_cake"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_cake()</span></code></a> - Load layers of configuration files
+with optional environment variable overrides.</p>
+<p><a class="reference internal" href="#layered_config.munchify_config" title="layered_config.munchify_config"><code class="xref py py-func docutils literal notranslate"><span class="pre">munchify_config()</span></code></a> - copy a <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code> instance to a <a class="reference external" href="https://pypi.org/project/munch/">munch</a> to support
+attribute access to configuration data. (Note: <code class="docutils literal notranslate"><span class="pre">qe-config[munch]</span></code> must be installed)</p>
+<p>Layers of configuration files?  Yes! Read on!</p>
+<p>Application or test configuration is often dependent upon
+the specific environment being used.
+Across many environments, there can be a good deal of common configuration as well.
+Cut’n’paste-ing configuration files
+and trying to maintain the various duplicated configurations is a challenge,
+and is not DRY.
+<code class="docutils literal notranslate"><span class="pre">load_cake</span></code> gives you a way to layer configurations
+so you can have common configurations in one place,
+and use them, with variations, in many places.
+For convenience a layering of configuration files is called a config cake,
+or just a cake.</p>
+<p>Additionally, <code class="docutils literal notranslate"><span class="pre">load_cake</span></code>’s configuration file can declare
+that environment variables can be used to override configuration settings.
+This makes it easy to have a cake used by your CI/CD server
+and still permit configuration values to be defined/overridden
+with manually entered job parameters.</p>
+<p><code class="docutils literal notranslate"><span class="pre">load_cake</span></code> returns a plain old Python <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code> instance
+that we already know and love. Or at least know.</p>
+<p>The built-in Python <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code> class
+already supports layering multiple configuration files;
+<code class="docutils literal notranslate"><span class="pre">load_cake</span></code> allows your code to specify your layering
+in an external ‘master’ config file.
+The ‘master’ config file also lets you explicitly configure
+if, and how, environment variable overrides work.
+Note that environment variable overrides are processed only once,
+when the configuration cake’s layers are processed.
+If you want to change the configuration dynamically after that,
+use <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code>’s methods,
+as you would with any <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code> instance.
+<code class="docutils literal notranslate"><span class="pre">load_cake</span></code> merges configuration files
+just as the <code class="docutils literal notranslate"><span class="pre">ConfigParser.read()</span></code> method does,
+but, unlike <code class="docutils literal notranslate"><span class="pre">read()</span></code>, all the files must exist.</p>
+<p>The ‘master’ config file has sections that represent your various cakes.
+Each cake section must have a <code class="docutils literal notranslate"><span class="pre">layers</span></code> key defining
+the relative paths of configuration files to be loaded, from left to right.
+All the keys and their values from the cake’s section of the ‘master’ config file
+will be set in the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> dictionary of the <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code> instance
+<cite>before</cite> the config files from the <code class="docutils literal notranslate"><span class="pre">layers</span></code> key are loaded.</p>
+<p>If a section for defining how environment variable overrides work
+is included in the ‘master’ config file,
+or any of the the config files from the layers,
+then config values can be overridden with environment variables.</p>
+<p>Here is a simple example.</p>
+<p>base.config:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Section</span><span class="o">-</span><span class="n">A</span><span class="p">]</span>
+<span class="n">key0</span> <span class="o">=</span> <span class="n">value0</span>
+<span class="n">key1</span> <span class="o">=</span> <span class="n">value1</span>
+<span class="o">.</span>  <span class="o">.</span>  <span class="o">.</span>
+</pre></div>
+</div>
+<p>staging.config:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Section</span><span class="o">-</span><span class="n">A</span><span class="p">]</span>
+<span class="n">key0</span> <span class="o">=</span> <span class="n">staging_value0</span>
+<span class="o">.</span>  <span class="o">.</span>  <span class="o">.</span>
+</pre></div>
+</div>
+<p>demo.config:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Section</span><span class="o">-</span><span class="n">A</span><span class="p">]</span>
+<span class="n">key0</span> <span class="o">=</span> <span class="n">demo_value0</span>
+<span class="o">.</span> <span class="o">.</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>master.config:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ENVIRONMENT</span> <span class="n">VARIABLE</span> <span class="n">OVERRIDE</span> <span class="n">INFO</span><span class="p">]</span>
+<span class="c1"># Override configuration data by setting environment variables with this prefix;</span>
+<span class="n">prefix</span><span class="o">=</span><span class="n">MyPrefix</span>
+
+<span class="c1"># Environment variable overrides will be of the form:</span>
+<span class="c1">#     &lt;prefix&gt;&lt;separator&gt;&lt;section name&gt;&lt;separator&gt;&lt;option name&gt;</span>
+<span class="c1"># In this example:</span>
+<span class="c1">#     MyPrefix__Section-A__key3=env_var_value_here</span>
+<span class="n">separator</span><span class="o">=</span><span class="n">__</span>
+
+<span class="p">[</span><span class="n">env1</span><span class="p">]</span>
+<span class="c1"># Each section name is of the form: &lt;thing&gt;</span>
+<span class="c1"># You probably want &lt;thing&gt; to be helpful; this example shows that the</span>
+<span class="c1"># section name is arbitrary and doesn&#39;t affect or determine any of the</span>
+<span class="c1"># config file names.</span>
+
+<span class="c1"># layers is a comma separated list of configuration files to load,</span>
+<span class="c1"># in order from left to right.</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">staging</span><span class="o">.</span><span class="n">config</span>
+
+<span class="p">[</span><span class="n">env2</span><span class="p">]</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">demo</span><span class="o">.</span><span class="n">config</span>
+<span class="n">key1</span> <span class="o">=</span> <span class="n">value1</span>
+<span class="nb">all</span> <span class="n">extra</span> <span class="n">keys</span> <span class="o">=</span> <span class="ow">and</span> <span class="n">values</span> <span class="n">will</span> <span class="n">be</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">defaults</span> <span class="n">of</span> <span class="n">the</span> <span class="n">new</span> <span class="n">config</span> <span class="n">parser</span>
+</pre></div>
+</div>
+<p>How to use it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qe_config</span> <span class="kn">import</span> <span class="n">load_cake</span>
+
+<span class="c1"># Load a configuration from the master config file for environment 1:</span>
+<span class="n">my_config</span> <span class="o">=</span> <span class="n">load_cake</span><span class="p">(</span><span class="s1">&#39;master.config&#39;</span><span class="p">,</span> <span class="s1">&#39;env1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py function">
+<dt id="layered_config.load_cake">
+<code class="sig-prename descclassname">layered_config.</code><code class="sig-name descname">load_cake</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">master_config_path</span></em>, <em class="sig-param"><span class="n">cake_name</span></em>, <em class="sig-param"><span class="n">into_config</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/layered_config.html#load_cake"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#layered_config.load_cake" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a layered configuration cake by name from a master config file.</p>
+<p>All the keys and their values from the <code class="docutils literal notranslate"><span class="pre">cake_name</span></code> section
+of the <code class="docutils literal notranslate"><span class="pre">master_config</span></code> file will be added to the defaults dictionary
+of the <code class="docutils literal notranslate"><span class="pre">into_config</span></code> config parser before any of the layers config
+files are loaded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master_config_path</strong> (<em>str</em>) – the file path for the master configuration file.</p></li>
+<li><p><strong>cake_name</strong> (<em>str</em>) – the particular configuration to load as described
+in the master configuration file.
+This is the name of a section of the master configuration file.</p></li>
+<li><p><strong>into_config</strong> (<em>ConfigParser</em><em>, </em><em>optional</em>) – A pre-created config parser
+to load the cake in to. If None, a plain <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code> is created.
+Use this if want a different variant of a <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code> to be used;
+for example, if you don’t want the default interpolation that a
+plain <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code> uses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code> instance.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>NoSectionError</strong> – If <code class="docutils literal notranslate"><span class="pre">cake_name</span></code> is not found in the master config file.</p></li>
+<li><p><strong>NoOptionError</strong> – If any required options are missing, either from the
+    environment override section, or any individual CAKE section.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="layered_config.munchify_config">
+<code class="sig-prename descclassname">layered_config.</code><code class="sig-name descname">munchify_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_parser</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/layered_config.html#munchify_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#layered_config.munchify_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <code class="docutils literal notranslate"><span class="pre">munch</span></code> version of the config_parser’s data.</p>
+<p><code class="docutils literal notranslate"><span class="pre">munch</span></code> allows both attribute and item access to it’s data.
+See the <a class="reference external" href="https://pypi.org/project/munch/">munch</a> documentation for details.</p>
+<p>Note: This is a one-time conversion,
+if the <code class="docutils literal notranslate"><span class="pre">config_parser</span></code> is subsequently updated,
+the returned <code class="docutils literal notranslate"><span class="pre">munch</span></code> will be unaffected.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="layered_config.string_to_list">
+<code class="sig-prename descclassname">layered_config.</code><code class="sig-name descname">string_to_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">','</span></em>, <em class="sig-param"><span class="n">maxsplit</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">chars</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/layered_config.html#string_to_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#layered_config.string_to_list" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">.split()</span></code> a string into a list and <code class="docutils literal notranslate"><span class="pre">.strip()</span></code> each piece.</p>
+<p>For handling lists of things, from config files, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>str</em>) – the source string to process</p></li>
+<li><p><strong>sep</strong> (<em>str</em><em>, </em><em>optional</em>) – The <code class="docutils literal notranslate"><span class="pre">.split</span></code> <code class="docutils literal notranslate"><span class="pre">sep</span></code> (separator) to use.</p></li>
+<li><p><strong>maxsplit</strong> (<em>int</em><em>, </em><em>optional</em>) – The <code class="docutils literal notranslate"><span class="pre">.split</span></code> <code class="docutils literal notranslate"><span class="pre">maxsplit</span></code> parameter to use.</p></li>
+<li><p><strong>chars</strong> (<em>str</em><em>, </em><em>optional</em>) – The <code class="docutils literal notranslate"><span class="pre">.strip</span></code> <code class="docutils literal notranslate"><span class="pre">chars</span></code> parameter to use.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="MAINTAINER.html" class="btn btn-neutral float-right" title="Maintainer’s Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="layered_config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Doug Philips
+      <span class="build">
+        
+        Build
+        <a href="https://github.com/jolly-good-toolbelt/layered-config/tree/6d0bf25db251b6e63821fcaa9e28c02c4e497970">6d0bf25db251b6e63821fcaa9e28c02c4e497970</a>.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

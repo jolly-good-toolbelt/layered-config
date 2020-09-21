@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>layered_config &mdash; layered-config - A tool for managing layered config files! 2.0.3 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="layered_config package" href="layered_config.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home" alt="Documentation Home"> layered-config - A tool for managing layered config files!
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="layered_config.html">layered_config package</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="MAINTAINER.html">Maintainer’s Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MAINTAINER.html#top-level-scripts">Top-level scripts:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MAINTAINER.html#jgt-tools-scripts">JGT Tools scripts:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTORS.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">layered-config - A tool for managing layered config files!</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>layered_config</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="layered-config">
+<h1>layered_config<a class="headerlink" href="#layered-config" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt>A simple library to ease maintaining groups of similar configurations:</dt><dd><ul class="simple">
+<li><p>Keep config files DRY like code.</p></li>
+<li><p>Allow environment variables to override configuration file values.</p></li>
+<li><p><a class="reference external" href="https://pypi.org/project/munch/">munch</a> your loaded configuration for easy field access.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Instead of copy’n’paste-ing related configuration files for different situations,
+refactor the configuration sections and keys into separate smaller configuration files.
+Then use this library to combine those files in various ways to produce a single <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code> object,
+as if it had come from a single file.</p>
+<div class="section" id="tl-dr-quick-start-in-3-easy-steps">
+<h2>tl;dr Quick Start in 3 Easy Steps:<a class="headerlink" href="#tl-dr-quick-start-in-3-easy-steps" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="create-some-configs">
+<h3>1. Create some configs:<a class="headerlink" href="#create-some-configs" title="Permalink to this headline">¶</a></h3>
+<p>For this simple example, consider three config files:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">../base.config</span></code> - all the common stuff between your environments,
+stored in the parent directory of the master.config file.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">staging.config</span></code> - config info specific to your staging environment.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">demo.config</span></code> - config info specific to your demo environment.</div>
+</div>
+</div></blockquote>
+<p>Create a <code class="docutils literal notranslate"><span class="pre">master.config</span></code> file describing how to layer the simpler config files.
+The master config file’s name is arbitrary.
+Your code needs to know its name, but this library doesn’t care.</p>
+<p><code class="docutils literal notranslate"><span class="pre">master.config</span></code> file:</p>
+<div class="highlight-INI notranslate"><div class="highlight"><pre><span></span><span class="k">[staging environment]</span>
+<span class="c1"># layers is a comma separated list of configuration files to load,</span>
+<span class="c1"># in order, left to right: ``../base.config`` is loaded first, and then</span>
+<span class="c1"># ``staging.config`` is loaded over top of it.</span>
+<span class="c1"># The file names can be absolute paths, or relative paths.</span>
+<span class="c1"># Relative paths are relative to the directory containing the master.config file.</span>
+<span class="na">layers</span> <span class="o">=</span> <span class="s">../base.config, staging.config</span>
+
+<span class="k">[demo environment]</span>
+<span class="na">layers</span> <span class="o">=</span> <span class="s">../base.config, demo.config</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-one-call-to-your-code">
+<h3>2. Add One Call to Your Code:<a class="headerlink" href="#add-one-call-to-your-code" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">layered_config</span> <span class="kn">import</span> <span class="n">load_cake</span>
+<span class="c1"># ...</span>
+<span class="n">my_config_parser_instance</span> <span class="o">=</span> <span class="n">load_cake</span><span class="p">(</span><span class="s2">&quot;master.config&quot;</span><span class="p">,</span> <span class="n">config_section_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="what-just-happened">
+<h3>3. What Just Happened?<a class="headerlink" href="#what-just-happened" title="Permalink to this headline">¶</a></h3>
+<p>The call to <code class="docutils literal notranslate"><span class="pre">load_cake</span></code>:</p>
+<ol class="arabic simple">
+<li><p>created a new empty <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code> object (see the API docs if you want to customize it).</p></li>
+<li><p>looked in the <code class="docutils literal notranslate"><span class="pre">master.config</span></code> file for a section matching the value of <code class="docutils literal notranslate"><span class="pre">config_section_name</span></code>.</p></li>
+<li><p>retrieved the value for the <code class="docutils literal notranslate"><span class="pre">layers</span></code> key of that section.</p></li>
+<li><p>processed the files in that value, from left to right,
+loading each config file into the ConfigParser instance, and making sure the file exists.
+For the example above, this means that values defined in <code class="docutils literal notranslate"><span class="pre">../base.config</span></code> can be replaced by,
+and/or added to by, those in <code class="docutils literal notranslate"><span class="pre">staging.config</span></code> or <code class="docutils literal notranslate"><span class="pre">demo.config</span></code></p></li>
+</ol>
+</div>
+</div>
+<div class="section" id="a-few-more-details">
+<h2>A few more details<a class="headerlink" href="#a-few-more-details" title="Permalink to this headline">¶</a></h2>
+<p>“Cake?” - yeah, layers of configuration files, we call a cake.
+There were many analogies to chose from, we chose cake.</p>
+<p>The result of loading a configuration cake is a plain ol’ Python <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code> instance,
+an old Python class we know and love. Or at least know.</p>
+<p>“Python’s <code class="docutils literal notranslate"><span class="pre">ConfigParser</span></code> already supports loading more than one configuration file like this, what gives?”</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>ConfigParser is designed to ignore files it can’t find, on purpose.
+We want to consider that an error.</p></li>
+<li><p>Calling ConfigParser directly you have to put the configuration file list into your code.
+We want to allow the list of configuration files itself
+to be changed and updated without having to make any code changes.</p></li>
+<li><p>ConfigParser does not support environment variable overrides.
+We have found environment variable overrides very helpful for CICD situations as well as
+one-time local testing.</p></li>
+</ul>
+</div></blockquote>
+<p>“What about config tool X?”</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>We looked at several other tools before deciding on writing this one.
+Detailed comparative analysis to come in a future PR.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Just install via <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">layered</span><span class="o">-</span><span class="n">config</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="layered-config-how-to-use-it-module-documentation">
+<h2>layered-config - How To Use It - Module Documentation<a class="headerlink" href="#layered-config-how-to-use-it-module-documentation" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="layered_config.html">layered_config package</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="maintainer-s-documentation">
+<h1>Maintainer’s Documentation<a class="headerlink" href="#maintainer-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="MAINTAINER.html">Maintainer’s Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MAINTAINER.html#top-level-scripts">Top-level scripts:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MAINTAINER.html#jgt-tools-scripts">JGT Tools scripts:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTORS.html">Contributors</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="layered_config.html" class="btn btn-neutral float-right" title="layered_config package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Doug Philips
+      <span class="build">
+        
+        Build
+        <a href="https://github.com/jolly-good-toolbelt/layered-config/tree/6d0bf25db251b6e63821fcaa9e28c02c4e497970">6d0bf25db251b6e63821fcaa9e28c02c4e497970</a>.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

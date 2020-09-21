@@ -1,0 +1,7 @@
+layered\_config package
+=======================
+
+.. automodule:: layered_config
+   :members:
+   :undoc-members:
+   :show-inheritance:

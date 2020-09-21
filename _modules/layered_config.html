@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>layered_config &mdash; layered-config - A tool for managing layered config files! 2.0.3 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> layered-config - A tool for managing layered config files!
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../layered_config.html">layered_config package</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../MAINTAINER.html">Maintainer’s Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../MAINTAINER.html#top-level-scripts">Top-level scripts:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../MAINTAINER.html#jgt-tools-scripts">JGT Tools scripts:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTORS.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">layered-config - A tool for managing layered config files!</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>layered_config</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for layered_config</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Tools for working with the ``ConfigParser`` instances.</span>
+
+<span class="sd">:py:func:`load_cake` - Load layers of configuration files</span>
+<span class="sd">with optional environment variable overrides.</span>
+
+<span class="sd">:py:func:`munchify_config` - copy a ``ConfigParser`` instance to a `munch`_ to support</span>
+<span class="sd">attribute access to configuration data. (Note: ``qe-config[munch]`` must be installed)</span>
+
+<span class="sd">Layers of configuration files?  Yes! Read on!</span>
+
+<span class="sd">Application or test configuration is often dependent upon</span>
+<span class="sd">the specific environment being used.</span>
+<span class="sd">Across many environments, there can be a good deal of common configuration as well.</span>
+<span class="sd">Cut&#39;n&#39;paste-ing configuration files</span>
+<span class="sd">and trying to maintain the various duplicated configurations is a challenge,</span>
+<span class="sd">and is not DRY.</span>
+<span class="sd">``load_cake`` gives you a way to layer configurations</span>
+<span class="sd">so you can have common configurations in one place,</span>
+<span class="sd">and use them, with variations, in many places.</span>
+<span class="sd">For convenience a layering of configuration files is called a config cake,</span>
+<span class="sd">or just a cake.</span>
+
+<span class="sd">Additionally, ``load_cake``&#39;s configuration file can declare</span>
+<span class="sd">that environment variables can be used to override configuration settings.</span>
+<span class="sd">This makes it easy to have a cake used by your CI/CD server</span>
+<span class="sd">and still permit configuration values to be defined/overridden</span>
+<span class="sd">with manually entered job parameters.</span>
+
+<span class="sd">``load_cake`` returns a plain old Python ``ConfigParser`` instance</span>
+<span class="sd">that we already know and love. Or at least know.</span>
+
+<span class="sd">The built-in Python ``ConfigParser`` class</span>
+<span class="sd">already supports layering multiple configuration files;</span>
+<span class="sd">``load_cake`` allows your code to specify your layering</span>
+<span class="sd">in an external &#39;master&#39; config file.</span>
+<span class="sd">The &#39;master&#39; config file also lets you explicitly configure</span>
+<span class="sd">if, and how, environment variable overrides work.</span>
+<span class="sd">Note that environment variable overrides are processed only once,</span>
+<span class="sd">when the configuration cake&#39;s layers are processed.</span>
+<span class="sd">If you want to change the configuration dynamically after that,</span>
+<span class="sd">use ``ConfigParser``&#39;s methods,</span>
+<span class="sd">as you would with any ``ConfigParser`` instance.</span>
+<span class="sd">``load_cake`` merges configuration files</span>
+<span class="sd">just as the ``ConfigParser.read()`` method does,</span>
+<span class="sd">but, unlike ``read()``, all the files must exist.</span>
+
+<span class="sd">The &#39;master&#39; config file has sections that represent your various cakes.</span>
+<span class="sd">Each cake section must have a ``layers`` key defining</span>
+<span class="sd">the relative paths of configuration files to be loaded, from left to right.</span>
+<span class="sd">All the keys and their values from the cake&#39;s section of the &#39;master&#39; config file</span>
+<span class="sd">will be set in the ``defaults`` dictionary of the ``ConfigParser`` instance</span>
+<span class="sd">`before` the config files from the ``layers`` key are loaded.</span>
+
+<span class="sd">If a section for defining how environment variable overrides work</span>
+<span class="sd">is included in the &#39;master&#39; config file,</span>
+<span class="sd">or any of the the config files from the layers,</span>
+<span class="sd">then config values can be overridden with environment variables.</span>
+
+
+<span class="sd">Here is a simple example.</span>
+
+<span class="sd">base.config::</span>
+
+<span class="sd">    [Section-A]</span>
+<span class="sd">    key0 = value0</span>
+<span class="sd">    key1 = value1</span>
+<span class="sd">    .  .  .</span>
+
+<span class="sd">staging.config::</span>
+
+<span class="sd">    [Section-A]</span>
+<span class="sd">    key0 = staging_value0</span>
+<span class="sd">    .  .  .</span>
+
+<span class="sd">demo.config::</span>
+
+<span class="sd">    [Section-A]</span>
+<span class="sd">    key0 = demo_value0</span>
+<span class="sd">    . . .</span>
+
+<span class="sd">master.config::</span>
+
+<span class="sd">    [ENVIRONMENT VARIABLE OVERRIDE INFO]</span>
+<span class="sd">    # Override configuration data by setting environment variables with this prefix;</span>
+<span class="sd">    prefix=MyPrefix</span>
+
+<span class="sd">    # Environment variable overrides will be of the form:</span>
+<span class="sd">    #     &lt;prefix&gt;&lt;separator&gt;&lt;section name&gt;&lt;separator&gt;&lt;option name&gt;</span>
+<span class="sd">    # In this example:</span>
+<span class="sd">    #     MyPrefix__Section-A__key3=env_var_value_here</span>
+<span class="sd">    separator=__</span>
+
+<span class="sd">    [env1]</span>
+<span class="sd">    # Each section name is of the form: &lt;thing&gt;</span>
+<span class="sd">    # You probably want &lt;thing&gt; to be helpful; this example shows that the</span>
+<span class="sd">    # section name is arbitrary and doesn&#39;t affect or determine any of the</span>
+<span class="sd">    # config file names.</span>
+
+<span class="sd">    # layers is a comma separated list of configuration files to load,</span>
+<span class="sd">    # in order from left to right.</span>
+<span class="sd">    layers = base.config, staging.config</span>
+
+<span class="sd">    [env2]</span>
+<span class="sd">    layers = base.config, demo.config</span>
+<span class="sd">    key1 = value1</span>
+<span class="sd">    all extra keys = and values will be in the defaults of the new config parser</span>
+
+
+<span class="sd">How to use it::</span>
+
+<span class="sd">    from qe_config import load_cake</span>
+
+<span class="sd">    # Load a configuration from the master config file for environment 1:</span>
+<span class="sd">    my_config = load_cake(&#39;master.config&#39;, &#39;env1&#39;)</span>
+
+
+<span class="sd">.. _`munch`: https://pypi.org/project/munch/</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">configparser</span> <span class="kn">import</span> <span class="n">ConfigParser</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<div class="viewcode-block" id="string_to_list"><a class="viewcode-back" href="../layered_config.html#layered_config.string_to_list">[docs]</a><span class="k">def</span> <span class="nf">string_to_list</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">chars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ``.split()`` a string into a list and ``.strip()`` each piece.</span>
+
+<span class="sd">    For handling lists of things, from config files, etc.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        source (str): the source string to process</span>
+<span class="sd">        sep (str, optional): The ``.split`` ``sep`` (separator) to use.</span>
+<span class="sd">        maxsplit (int, optional): The ``.split`` ``maxsplit`` parameter to use.</span>
+<span class="sd">        chars (str, optional): The ``.strip`` ``chars`` parameter to use.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">source</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">,</span> <span class="n">maxsplit</span><span class="p">)]</span></div>
+
+
+<span class="n">CONFIG_FILE_LIST_KEY</span> <span class="o">=</span> <span class="s2">&quot;layers&quot;</span>
+<span class="n">ENV_VAR_SECTION_NAME</span> <span class="o">=</span> <span class="s2">&quot;ENVIRONMENT VARIABLE OVERRIDE INFO&quot;</span>
+<span class="c1"># Sections in the master config that should also be included</span>
+<span class="c1"># in the config returned by load_cake.</span>
+<span class="n">MASTER_CONFIG_SECTIONS_TO_KEEP</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># We keep the environment variable override section in the config,</span>
+    <span class="c1"># since it will be used for determining if and how</span>
+    <span class="c1"># environment variable overrides will work.</span>
+    <span class="n">ENV_VAR_SECTION_NAME</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_filenames_relative_to</span><span class="p">(</span><span class="n">base_file</span><span class="p">,</span> <span class="n">filename_list</span><span class="p">):</span>
+    <span class="n">base_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">base_file</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filename_list</span>
+    <span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_must_read</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;Cannot read config file: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_env_override</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">environment</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Process environment overrides, if any are configured.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">has_section</span><span class="p">(</span><span class="n">ENV_VAR_SECTION_NAME</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="n">prefix</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ENV_VAR_SECTION_NAME</span><span class="p">,</span> <span class="s2">&quot;prefix&quot;</span><span class="p">)</span>
+    <span class="n">separator</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ENV_VAR_SECTION_NAME</span><span class="p">,</span> <span class="s2">&quot;separator&quot;</span><span class="p">)</span>
+
+    <span class="n">env_prefix</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">separator</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">environment</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">env_prefix</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">separator</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">option</span> <span class="o">=</span> <span class="n">parts</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">has_section</span><span class="p">(</span><span class="n">section</span><span class="p">):</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="load_cake"><a class="viewcode-back" href="../layered_config.html#layered_config.load_cake">[docs]</a><span class="k">def</span> <span class="nf">load_cake</span><span class="p">(</span><span class="n">master_config_path</span><span class="p">,</span> <span class="n">cake_name</span><span class="p">,</span> <span class="n">into_config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a layered configuration cake by name from a master config file.</span>
+
+<span class="sd">    All the keys and their values from the ``cake_name`` section</span>
+<span class="sd">    of the ``master_config`` file will be added to the defaults dictionary</span>
+<span class="sd">    of the ``into_config`` config parser before any of the layers config</span>
+<span class="sd">    files are loaded.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        master_config_path (str): the file path for the master configuration file.</span>
+<span class="sd">        cake_name (str): the particular configuration to load as described</span>
+<span class="sd">            in the master configuration file.</span>
+<span class="sd">            This is the name of a section of the master configuration file.</span>
+<span class="sd">        into_config (ConfigParser, optional): A pre-created config parser</span>
+<span class="sd">            to load the cake in to. If None, a plain ``ConfigParser`` is created.</span>
+<span class="sd">            Use this if want a different variant of a ``ConfigParser`` to be used;</span>
+<span class="sd">            for example, if you don&#39;t want the default interpolation that a</span>
+<span class="sd">            plain ``ConfigParser`` uses.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ``ConfigParser`` instance.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        NoSectionError: If ``cake_name`` is not found in the master config file.</span>
+<span class="sd">        NoOptionError: If any required options are missing, either from the</span>
+<span class="sd">            environment override section, or any individual CAKE section.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">master_config_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">master_config_path</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span> <span class="k">if</span> <span class="n">into_config</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">into_config</span>
+    <span class="n">_must_read</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">master_config_path</span><span class="p">)</span>
+    <span class="n">section_name</span> <span class="o">=</span> <span class="n">cake_name</span>
+
+    <span class="n">filename_list</span> <span class="o">=</span> <span class="n">string_to_list</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_name</span><span class="p">,</span> <span class="n">CONFIG_FILE_LIST_KEY</span><span class="p">))</span>
+    <span class="n">filename_list</span> <span class="o">=</span> <span class="n">_filenames_relative_to</span><span class="p">(</span><span class="n">master_config_path</span><span class="p">,</span> <span class="n">filename_list</span><span class="p">)</span>
+
+    <span class="c1"># Move all the keys from the section_name of the config</span>
+    <span class="c1"># into the default dictionary of the config,</span>
+    <span class="c1"># making them a foundational starting point for the layers.</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">read_dict</span><span class="p">({</span><span class="n">config</span><span class="o">.</span><span class="n">default_section</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="n">section_name</span><span class="p">]})</span>
+
+    <span class="c1"># Remove all irrelevant sections from the master config file</span>
+    <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">sections</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">section</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">MASTER_CONFIG_SECTIONS_TO_KEEP</span><span class="p">:</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">remove_section</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filename_list</span><span class="p">:</span>
+        <span class="n">_must_read</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="c1"># The result config is used for environment variable override information</span>
+    <span class="c1"># so that the environment variable override section can be defined</span>
+    <span class="c1"># in any of the layers or in the master config file.</span>
+    <span class="n">_env_override</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="munchify_config"><a class="viewcode-back" href="../layered_config.html#layered_config.munchify_config">[docs]</a><span class="k">def</span> <span class="nf">munchify_config</span><span class="p">(</span><span class="n">config_parser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a ``munch`` version of the config_parser&#39;s data.</span>
+
+<span class="sd">    ``munch`` allows both attribute and item access to it&#39;s data.</span>
+<span class="sd">    See the `munch`_ documentation for details.</span>
+
+<span class="sd">    Note: This is a one-time conversion,</span>
+<span class="sd">    if the ``config_parser`` is subsequently updated,</span>
+<span class="sd">    the returned ``munch`` will be unaffected.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">munch</span> <span class="kn">import</span> <span class="n">Munch</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">Munch</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">config_parser</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="n">config_parser</span><span class="o">.</span><span class="n">default_section</span><span class="p">]:</span>
+        <span class="n">intermediate</span> <span class="o">=</span> <span class="n">Munch</span><span class="p">()</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">section</span><span class="p">]</span> <span class="o">=</span> <span class="n">intermediate</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">config_parser</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">section</span><span class="p">):</span>
+            <span class="n">intermediate</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Doug Philips
+      <span class="build">
+        
+        Build
+        <a href="https://github.com/jolly-good-toolbelt/layered-config/tree/6d0bf25db251b6e63821fcaa9e28c02c4e497970">6d0bf25db251b6e63821fcaa9e28c02c4e497970</a>.
+      </span>
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
